@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: txlock-order-service
+  datasource:
+    url: jdbc:h2:mem:txlock;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
+demo:
+  redis:
+    address: redis://127.0.0.1:6379
+  remote:
+    base-url: http://127.0.0.1:8081
+    connect-timeout-ms: 1000
+    read-timeout-ms: 2000
+    max-attempts: 3
+    backoff-ms: 300
+  lock:
+    wait-ms: 500
+    lease-ms: 5000
+  reconcile:
+    cron: "0 0 2 * * *"
+    max-attempts: 5
+    batch-size: 200
+  outbox:
+    publish-delay-ms: 1000
+    batch-size: 10
+    max-retry: 5
+    retry-backoff-ms: 1000
+    lock-ms: 15000
+
+logging:
+  level:
+    com.example.txlock.order: INFO
